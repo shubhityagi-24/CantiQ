@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CantiQ - Allowed Food</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        body {
+            margin: 0;
+            background: #f7f8f2;
+            color: #30382b;
+            font-family: Arial, sans-serif;
+        }
+
+        .page {
+            max-width: 1100px;
+            margin: auto;
+            padding: 30px 20px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .topbar h1 {
+            margin: 0;
+            color: #4f603d;
+        }
+
+        .subtitle {
+            color: #73796b;
+            margin-top: 6px;
+        }
+
+        .food-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 18px;
+        }
+
+        .food-card {
+            background: white;
+            border: 1px solid #e1e7d9;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 14px rgba(60, 70, 45, 0.06);
+        }
+
+        .food-icon {
+            font-size: 38px;
+            margin-bottom: 10px;
+        }
+
+        .food-card h3 {
+            margin: 0 0 7px;
+            color: #4f603d;
+        }
+
+        .description {
+            color: #777d70;
+            font-size: 14px;
+            min-height: 38px;
+        }
+
+        .price {
+            font-weight: bold;
+            margin: 12px 0 5px;
+        }
+
+        .stock {
+            font-size: 14px;
+            color: #73796b;
+        }
+
+        .status {
+            margin-top: 15px;
+            padding: 9px 12px;
+            border-radius: 9px;
+            font-size: 13px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .not-allowed {
+            background: #fff3df;
+            color: #9a6718;
+        }
+
+        .allowed {
+            background: #e8f2df;
+            color: #4f6d35;
+        }
+
+        .allow-btn {
+            width: 100%;
+            margin-top: 12px;
+            padding: 10px;
+            border: none;
+            border-radius: 9px;
+            background: #66784b;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .allow-btn:hover {
+            background: #56673e;
+        }
+
+        .empty {
+            background: white;
+            border: 1px solid #e1e7d9;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            color: #777d70;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="page">
+
+    <div class="topbar">
+        <div>
+            <h1>Allowed Food</h1>
+            <p class="subtitle">
+                Manage which canteen foods are allowed.
+            </p>
+        </div>
+    </div>
+
+    <div id="foodContainer" class="food-grid">
+        <div class="empty">
+            Loading food list...
+        </div>
+    </div>
+
+</div>
+
+
+<script>
+
+let foods = [];
+
+
+async function loadFoods() {
+
+    const container =
+        document.getElementById("foodContainer");
+
+    try {
+
+        const response =
+            await fetch("/api/foods");
+
+        if (!response.ok) {
+            throw new Error("Unable to load food list");
+        }
+
+        foods = await response.json();
+
+        renderFoods();
+
+    } catch (error) {
+
+        container.innerHTML = `
+            <div class="empty">
+                Unable to connect to CantiQ backend.
+            </div>
+        `;
+    }
+}
+
+
+function renderFoods() {
+
+    const container =
+        document.getElementById("foodContainer");
+
+    if (foods.length === 0) {
+
+        container.innerHTML = `
+            <div class="empty">
+                No food items have been added yet.
+            </div>
+        `;
+
+        return;
+    }
+
+
+    container.innerHTML =
+        foods.map(food => {
+
+            const isAllowed =
+                localStorage.getItem(
+                    "allowed_food_" + food.id
+                ) === "true";
+
+
+            return `
+
+                <div class="food-card">
+
+                    <div class="food-icon">
+                        ${food.icon || "🍽️"}
+                    </div>
+
+                    <h3>
+                        ${food.name}
+                    </h3>
+
+                    <p class="description">
+                        ${food.description || ""}
+                    </p>
+
+                    <div class="price">
+                        ₹${food.price}
+                    </div>
+
+                    <div class="stock">
+                        Stock: ${food.stock}
+                    </div>
+
+
+                    ${
+                        isAllowed
+
+                        ?
+
+                        `
+                        <div class="status allowed">
+                            ✓ Allowed
+                        </div>
+
+                        <button
+                            class="allow-btn"
+                            onclick="changePermission(${food.id})"
+                        >
+                            Change to Not Allowed
+                        </button>
+                        `
+
+                        :
+
+                        `
+                        <div class="status not-allowed">
+                            Not Allowed Yet
+                        </div>
+
+                        <button
+                            class="allow-btn"
+                            onclick="allowFood(${food.id})"
+                        >
+                            Allow Food
+                        </button>
+                        `
+                    }
+
+                </div>
+
+            `;
+
+        }).join("");
+}
+
+
+function allowFood(id) {
+
+    localStorage.setItem(
+        "allowed_food_" + id,
+        "true"
+    );
+
+    renderFoods();
+}
+
+
+function changePermission(id) {
+
+    localStorage.setItem(
+        "allowed_food_" + id,
+        "false"
+    );
+
+    renderFoods();
+}
+
+
+loadFoods();
+
+</script>
+
+</body>
+</html>

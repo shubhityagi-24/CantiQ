@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CantiQ - Access Control</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#f5f6f0;
+    color:#25291f;
+}
+.topbar{
+    background:#667052;
+    color:white;
+    padding:18px 7%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+.logo{
+    font-size:24px;
+    font-weight:bold;
+}
+.topbar span{
+    font-size:13px;
+}
+.container{
+    width:86%;
+    max-width:1050px;
+    margin:35px auto;
+}
+.back{
+    color:#667052;
+    text-decoration:none;
+    font-weight:bold;
+}
+.hero{
+    background:white;
+    padding:28px;
+    border-radius:18px;
+    margin:20px 0;
+    box-shadow:0 5px 18px rgba(0,0,0,.06);
+}
+.tag{
+    color:#667052;
+    font-size:12px;
+    font-weight:bold;
+    letter-spacing:1px;
+}
+h1{
+    margin:8px 0;
+    font-size:32px;
+}
+.subtitle{
+    color:#777;
+}
+.section{
+    margin-top:25px;
+}
+.section h2{
+    font-size:21px;
+}
+.grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:18px;
+}
+.card{
+    background:white;
+    padding:22px;
+    border-radius:16px;
+    box-shadow:0 4px 15px rgba(0,0,0,.05);
+}
+.card h3{
+    margin-top:0;
+}
+.card p{
+    color:#666;
+    line-height:1.6;
+    font-size:14px;
+}
+.badge{
+    display:inline-block;
+    background:#e8eddf;
+    color:#586344;
+    padding:6px 10px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:bold;
+}
+.rules{
+    background:white;
+    border-radius:16px;
+    padding:22px;
+    box-shadow:0 4px 15px rgba(0,0,0,.05);
+}
+.rule{
+    padding:13px 0;
+    border-bottom:1px solid #eee;
+}
+.rule:last-child{
+    border-bottom:none;
+}
+.note{
+    margin-top:25px;
+    padding:16px;
+    background:#eef1e8;
+    border-radius:12px;
+    color:#59614c;
+    font-size:13px;
+}
+@media(max-width:700px){
+    .grid{
+        grid-template-columns:1fr;
+    }
+    .container{
+        width:92%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="topbar">
+    <div class="logo">CantiQ</div>
+    <span>Admin Management Portal</span>
+</div>
+
+<div class="container">
+
+    <a href="admin-dashboard.html" class="back">← Back to Admin Dashboard</a>
+
+    <div class="hero">
+        <div class="tag">SYSTEM SECURITY</div>
+        <h1>Access Control</h1>
+        <p class="subtitle">
+            Role-based access permissions for the CantiQ system.
+        </p>
+    </div>
+
+    <div class="section">
+        <h2>Role Permissions</h2>
+
+        <div class="grid">
+
+            <div class="card">
+                <h3>Parent / Student</h3>
+                <span class="badge">User Access</span>
+                <p>
+                    Dashboard<br>
+                    Allowed Food<br>
+                    Purchase History<br>
+                    Notifications
+                </p>
+            </div>
+
+            <div class="card">
+                <h3>Canteen</h3>
+                <span class="badge">Canteen Access</span>
+                <p>
+                    Canteen Dashboard<br>
+                    Food List<br>
+                    Stock Management<br>
+                    Sales Analytics<br>
+                    Canteen Settings
+                </p>
+            </div>
+
+            <div class="card">
+                <h3>Admin</h3>
+                <span class="badge">Full Access</span>
+                <p>
+                    Manage Users<br>
+                    Manage Canteens<br>
+                    Payment & Settlement<br>
+                    System Analytics<br>
+                    Access Control
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Security Rules</h2>
+
+        <div class="rules">
+
+            <div class="rule">
+                ✓ Parent / Student can access only user features.
+            </div>
+
+            <div class="rule">
+                ✓ Canteen accounts can access only canteen features.
+            </div>
+
+            <div class="rule">
+                ✓ Canteen accounts cannot access Admin Management.
+            </div>
+
+            <div class="rule">
+                ✓ Parent / Student accounts cannot access Admin or Canteen Management.
+            </div>
+
+            <div class="rule">
+                ✓ Admin accounts have system-level management access.
+            </div>
+
+        </div>
+    </div>
+
+    <div class="note">
+        <strong>Prototype Note:</strong>
+        Final role verification and secure access control will be handled by the backend server.
+    </div>
+
+</div>
+
+</body>
+</html>

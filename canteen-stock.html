@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CantiQ - Stock Management</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f6f5ed;
+            color: #26351f;
+        }
+
+        .topbar {
+            background: #536b3c;
+            color: white;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand h2 {
+            font-size: 24px;
+        }
+
+        .brand p {
+            font-size: 12px;
+            opacity: 0.85;
+            margin-top: 3px;
+        }
+
+        .back {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .container {
+            width: 86%;
+            max-width: 1100px;
+            margin: 35px auto;
+        }
+
+        .hero {
+            margin-bottom: 28px;
+        }
+
+        .tag {
+            color: #718650;
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 1.5px;
+        }
+
+        .hero h1 {
+            font-size: 34px;
+            margin-top: 8px;
+        }
+
+        .hero p {
+            color: #68705f;
+            margin-top: 8px;
+        }
+
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin-bottom: 28px;
+        }
+
+        .summary-card {
+            background: white;
+            padding: 22px;
+            border-radius: 16px;
+            border: 1px solid #e2e4d8;
+        }
+
+        .summary-card span {
+            color: #747a6c;
+            font-size: 13px;
+        }
+
+        .summary-card h2 {
+            margin-top: 8px;
+            font-size: 27px;
+        }
+
+        .stock-card {
+            background: white;
+            border: 1px solid #e2e4d8;
+            border-radius: 18px;
+            overflow: hidden;
+        }
+
+        .stock-header {
+            padding: 22px;
+            border-bottom: 1px solid #e6e7df;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stock-header h2 {
+            font-size: 20px;
+        }
+
+        .stock-header span {
+            font-size: 13px;
+            color: #777d70;
+        }
+
+        .item {
+            padding: 19px 22px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eeeeea;
+        }
+
+        .item:last-child {
+            border-bottom: none;
+        }
+
+        .item-info h3 {
+            font-size: 16px;
+        }
+
+        .item-info p {
+            color: #858a80;
+            font-size: 13px;
+            margin-top: 5px;
+        }
+
+        .stock-status {
+            text-align: right;
+        }
+
+        .quantity {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .status {
+            display: inline-block;
+            margin-top: 5px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .available {
+            background: #e6f0dc;
+            color: #4d6937;
+        }
+
+        .low {
+            background: #fff1d7;
+            color: #966b22;
+        }
+
+        .out {
+            background: #f8dfdf;
+            color: #9a4b4b;
+        }
+
+        .note {
+            margin-top: 22px;
+            background: #eef2e8;
+            border-radius: 14px;
+            padding: 17px 20px;
+            color: #596451;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 700px) {
+            .summary {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                width: 92%;
+            }
+
+            .item {
+                gap: 15px;
+            }
+
+            .hero h1 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="topbar">
+        <div class="brand">
+            <h2>CantiQ</h2>
+            <p>Canteen Management Portal</p>
+        </div>
+
+        <a href="canteen-dashboard.html" class="back">
+            ← Dashboard
+        </a>
+    </div>
+
+    <div class="container">
+
+        <div class="hero">
+            <div class="tag">INVENTORY MANAGEMENT</div>
+            <h1>Stock Management</h1>
+            <p>Monitor food availability and current stock levels.</p>
+        </div>
+
+        <div class="summary">
+
+            <div class="summary-card">
+                <span>Total Items</span>
+                <h2>6</h2>
+            </div>
+
+            <div class="summary-card">
+                <span>Low Stock Items</span>
+                <h2>2</h2>
+            </div>
+
+            <div class="summary-card">
+                <span>Out of Stock</span>
+                <h2>1</h2>
+            </div>
+
+        </div>
+
+        <div class="stock-card">
+
+            <div class="stock-header">
+                <h2>Current Stock</h2>
+                <span>Last updated: Today</span>
+            </div>
+
+            <div class="item">
+                <div class="item-info">
+                    <h3>Fresh Fruits</h3>
+                    <p>₹30 per item</p>
+                </div>
+
+                <div class="stock-status">
+                    <div class="quantity">24 units</div>
+                    <div class="status available">Available</div>
+                </div>
+            </div>
+
+            <div class="item">
+                <div class="item-info">
+                    <h3>Sandwich</h3>
+                    <p>₹60 per item</p>
+                </div>
+
+                <div class="stock-status">
+                    <div class="quantity">18 units</div>
+                    <div class="status available">Available</div>
+                </div>
+            </div>
+
+            <div class="item">
+                <div class="item-info">
+                    <h3>Fruit Juice</h3>
+                    <p>₹40 per item</p>
+                </div>
+
+                <div class="stock-status">
+                    <div class="quantity">32 units</div>
+                    <div class="status available">Available</div>
+                </div>
+            </div>
+
+            <div class="item">
+                <div class="item-info">
+                    <h3>Chips</h3>
+                    <p>₹20 per item</p>
+                </div>
+
+                <div class="stock-status">
+                    <div class="quantity">8 units</div>
+                    <div class="status low">Low Stock</div>
+                </div>
+            </div>
+
+            <div class="item">
+                <div class="item-info">
+                    <h3>Soft Drinks</h3>
+                    <p>₹35 per item</p>
+                </div>
+
+                <div class="stock-status">
+                    <div class="quantity">0 units</div>
+                    <div class="status out">Out of Stock</div>
+                </div>
+            </div>
+
+            <div class="item">
+                <div class="item-info">
+                    <h3>Milk</h3>
+                    <p>₹25 per item</p>
+                </div>
+
+                <div class="stock-status">
+                    <div class="quantity">15 units</div>
+                    <div class="status available">Available</div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="note">
+            <strong>Prototype note:</strong> In the final CantiQ system,
+            stock quantities will automatically update after each purchase
+            and can be managed by the canteen through the backend.
+        </div>
+
+    </div>
+
+</body>
+</html>

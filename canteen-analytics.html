@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CantiQ - Sales Analytics</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f6f5ed;
+            color: #26351f;
+        }
+
+        .topbar {
+            background: #536b3c;
+            color: white;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand h2 {
+            font-size: 24px;
+        }
+
+        .brand p {
+            font-size: 12px;
+            opacity: 0.85;
+            margin-top: 3px;
+        }
+
+        .back {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .container {
+            width: 86%;
+            max-width: 1100px;
+            margin: 35px auto;
+        }
+
+        .hero {
+            margin-bottom: 28px;
+        }
+
+        .tag {
+            color: #718650;
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 1.5px;
+        }
+
+        .hero h1 {
+            font-size: 34px;
+            margin-top: 8px;
+        }
+
+        .hero p {
+            color: #68705f;
+            margin-top: 8px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin-bottom: 28px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 22px;
+            border-radius: 16px;
+            border: 1px solid #e2e4d8;
+        }
+
+        .stat-card span {
+            color: #747a6c;
+            font-size: 13px;
+        }
+
+        .stat-card h2 {
+            margin-top: 8px;
+            font-size: 27px;
+        }
+
+        .section {
+            background: white;
+            border: 1px solid #e2e4d8;
+            border-radius: 18px;
+            padding: 24px;
+            margin-bottom: 22px;
+        }
+
+        .section h2 {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .food-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid #eeeeea;
+        }
+
+        .food-row:last-child {
+            border-bottom: none;
+        }
+
+        .food-name h3 {
+            font-size: 15px;
+        }
+
+        .food-name p {
+            color: #858a80;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .food-sales {
+            text-align: right;
+        }
+
+        .food-sales strong {
+            font-size: 16px;
+        }
+
+        .food-sales p {
+            color: #718650;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        .progress {
+            width: 100%;
+            height: 8px;
+            background: #e9ece3;
+            border-radius: 10px;
+            margin-top: 18px;
+            overflow: hidden;
+        }
+
+        .bar {
+            height: 100%;
+            background: #718650;
+            border-radius: 10px;
+        }
+
+        .notice {
+            background: #eef2e8;
+            border-radius: 14px;
+            padding: 17px 20px;
+            color: #596451;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 700px) {
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                width: 92%;
+            }
+
+            .hero h1 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="topbar">
+        <div class="brand">
+            <h2>CantiQ</h2>
+            <p>Canteen Management Portal</p>
+        </div>
+
+        <a href="canteen-dashboard.html" class="back">
+            ← Dashboard
+        </a>
+    </div>
+
+    <div class="container">
+
+        <div class="hero">
+            <div class="tag">SALES & ANALYTICS</div>
+            <h1>Sales Analytics</h1>
+            <p>View today's canteen sales and popular food items.</p>
+        </div>
+
+        <div class="stats">
+
+            <div class="stat-card">
+                <span>Today's Sales</span>
+                <h2>₹1,840</h2>
+            </div>
+
+            <div class="stat-card">
+                <span>Total Orders</span>
+                <h2>42</h2>
+            </div>
+
+            <div class="stat-card">
+                <span>Average Order</span>
+                <h2>₹44</h2>
+            </div>
+
+        </div>
+
+        <div class="section">
+
+            <h2>Popular Food Items</h2>
+
+            <div class="food-row">
+                <div class="food-name">
+                    <h3>Fruit Juice</h3>
+                    <p>18 orders</p>
+                </div>
+
+                <div class="food-sales">
+                    <strong>₹720</strong>
+                    <p>Top seller</p>
+                </div>
+            </div>
+
+            <div class="progress">
+                <div class="bar" style="width: 90%;"></div>
+            </div>
+
+
+            <div class="food-row">
+                <div class="food-name">
+                    <h3>Sandwich</h3>
+                    <p>12 orders</p>
+                </div>
+
+                <div class="food-sales">
+                    <strong>₹720</strong>
+                    <p>Good demand</p>
+                </div>
+            </div>
+
+            <div class="progress">
+                <div class="bar" style="width: 70%;"></div>
+            </div>
+
+
+            <div class="food-row">
+                <div class="food-name">
+                    <h3>Fresh Fruits</h3>
+                    <p>7 orders</p>
+                </div>
+
+                <div class="food-sales">
+                    <strong>₹210</strong>
+                    <p>Regular demand</p>
+                </div>
+            </div>
+
+            <div class="progress">
+                <div class="bar" style="width: 45%;"></div>
+            </div>
+
+
+            <div class="food-row">
+                <div class="food-name">
+                    <h3>Milk</h3>
+                    <p>5 orders</p>
+                </div>
+
+                <div class="food-sales">
+                    <strong>₹125</strong>
+                    <p>Regular demand</p>
+                </div>
+            </div>
+
+            <div class="progress">
+                <div class="bar" style="width: 30%;"></div>
+            </div>
+
+        </div>
+
+        <div class="section">
+
+            <h2>Today's Sales Summary</h2>
+
+            <div class="food-row">
+                <div class="food-name">
+                    <h3>Morning Session</h3>
+                    <p>8:00 AM – 11:00 AM</p>
+                </div>
+
+                <div class="food-sales">
+                    <strong>₹680</strong>
+                </div>
+            </div>
+
+            <div class="food-row">
+                <div class="food-name">
+                    <h3>Lunch Session</h3>
+                    <p>11:00 AM – 2:00 PM</p>
+                </div>
+
+                <div class="food-sales">
+                    <strong>₹1,160</strong>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="notice">
+            <strong>Prototype note:</strong> These analytics are sample data
+            for the CantiQ prototype. In the final system, sales will be
+            automatically calculated from recorded QR purchases.
+        </div>
+
+    </div>
+
+</body>
+</html>

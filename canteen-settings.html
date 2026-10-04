@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CantiQ - Settings</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f6f5ed;
+            color: #26351f;
+        }
+
+        .topbar {
+            background: #536b3c;
+            color: white;
+            padding: 20px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .subtitle {
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        .back {
+            color: white;
+            text-decoration: none;
+        }
+
+        .container {
+            width: 86%;
+            max-width: 1000px;
+            margin: 35px auto;
+        }
+
+        .tag {
+            color: #718650;
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        h1 {
+            font-size: 34px;
+            margin: 8px 0;
+        }
+
+        .intro {
+            color: #68705f;
+            margin-bottom: 28px;
+        }
+
+        .card {
+            background: white;
+            border: 1px solid #e2e4d8;
+            border-radius: 18px;
+            padding: 25px;
+            margin-bottom: 22px;
+        }
+
+        .card h2 {
+            margin-top: 0;
+            font-size: 20px;
+        }
+
+        .device-box {
+            background: #f1f4ec;
+            padding: 18px;
+            border-radius: 12px;
+        }
+
+        .device-name {
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .device-id {
+            color: #777d70;
+            font-size: 13px;
+            margin-top: 6px;
+        }
+
+        .online {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            background: #e5efd9;
+            color: #4d6937;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .row {
+            padding: 17px 0;
+            border-bottom: 1px solid #eeeeea;
+        }
+
+        .row:last-child {
+            border-bottom: none;
+        }
+
+        .row-title {
+            font-weight: bold;
+            font-size: 15px;
+        }
+
+        .row-text {
+            color: #858a80;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .value {
+            margin-top: 7px;
+            color: #596451;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .info {
+            background: #eef2e8;
+            padding: 18px;
+            border-radius: 14px;
+            color: #596451;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                width: 92%;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            .topbar {
+                padding: 18px 5%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="topbar">
+
+        <div>
+            <div class="logo">CantiQ</div>
+            <div class="subtitle">Canteen Management Portal</div>
+        </div>
+
+        <a class="back" href="canteen-dashboard.html">
+            ← Dashboard
+        </a>
+
+    </div>
+
+
+    <div class="container">
+
+        <div class="tag">CANTEEN SETTINGS</div>
+
+        <h1>Settings</h1>
+
+        <p class="intro">
+            Manage your canteen information and connected devices.
+        </p>
+
+
+        <div class="card">
+
+            <h2>QR Device</h2>
+
+            <div class="device-box">
+
+                <div class="device-name">
+                    CantiQ QR Scanner
+                </div>
+
+                <div class="device-id">
+                    Device ID: CQ-SCN-001
+                </div>
+
+                <div class="online">
+                    ● Online
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>Canteen Information</h2>
+
+            <div class="row">
+
+                <div class="row-title">
+                    Canteen Name
+                </div>
+
+                <div class="row-text">
+                    Name displayed in the CantiQ system
+                </div>
+
+                <div class="value">
+                    Main Canteen
+                </div>
+
+            </div>
+
+
+            <div class="row">
+
+                <div class="row-title">
+                    School
+                </div>
+
+                <div class="row-text">
+                    Registered school
+                </div>
+
+                <div class="value">
+                    Surevin International School
+                </div>
+
+            </div>
+
+
+            <div class="row">
+
+                <div class="row-title">
+                    Account Status
+                </div>
+
+                <div class="row-text">
+                    Current canteen access
+                </div>
+
+                <div class="value">
+                    Active
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>System Settings</h2>
+
+            <div class="row">
+
+                <div class="row-title">
+                    QR Purchase Verification
+                </div>
+
+                <div class="row-text">
+                    Verify student permissions before recording purchases.
+                </div>
+
+                <div class="value">
+                    Enabled
+                </div>
+
+            </div>
+
+
+            <div class="row">
+
+                <div class="row-title">

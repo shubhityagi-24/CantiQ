@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CantiQ - Notifications</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f5f6f0;
+    color: #292d24;
+}
+
+.topbar {
+    background: #667052;
+    color: white;
+    padding: 18px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.topbar a {
+    color: white;
+    text-decoration: none;
+}
+
+.container {
+    width: 86%;
+    max-width: 950px;
+    margin: 35px auto;
+}
+
+.back {
+    color: #667052;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.hero {
+    background: white;
+    padding: 28px;
+    border-radius: 18px;
+    margin: 20px 0;
+    box-shadow: 0 4px 15px rgba(0,0,0,.05);
+}
+
+.tag {
+    color: #667052;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+h1 {
+    margin: 8px 0;
+    font-size: 32px;
+}
+
+.subtitle {
+    color: #777;
+}
+
+.actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 15px;
+}
+
+.actions button {
+    border: none;
+    background: #667052;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.notification {
+    background: white;
+    padding: 20px;
+    border-radius: 16px;
+    margin-bottom: 15px;
+    display: flex;
+    gap: 15px;
+    align-items: flex-start;
+    box-shadow: 0 4px 15px rgba(0,0,0,.05);
+    transition: .2s;
+}
+
+.notification.read {
+    opacity: .65;
+}
+
+.icon {
+    width: 44px;
+    height: 44px;
+    background: #e9edde;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.content {
+    flex: 1;
+}
+
+.content h3 {
+    margin: 0 0 6px;
+    font-size: 16px;
+}
+
+.content p {
+    margin: 0;
+    color: #666;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.time {
+    color: #999;
+    font-size: 12px;
+    margin-top: 7px;
+}
+
+.badge {
+    background: #667052;
+    color: white;
+    padding: 5px 9px;
+    border-radius: 15px;
+    font-size: 11px;
+}
+
+.read-btn {
+    margin-top: 10px;
+    border: none;
+    background: transparent;
+    color: #667052;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0;
+}
+
+.empty {
+    background: white;
+    padding: 30px;
+    border-radius: 16px;
+    text-align: center;
+    color: #777;
+}
+
+@media (max-width: 600px) {
+    .container {
+        width: 92%;
+    }
+
+    .notification {
+        padding: 16px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <div class="logo">CantiQ</div>
+
+    <a href="dashboard.html">Dashboard</a>
+
+</header>
+
+
+<main class="container">
+
+    <a href="dashboard.html" class="back">
+        ← Back to Dashboard
+    </a>
+
+
+    <section class="hero">
+
+        <div class="tag">UPDATES & ALERTS</div>
+
+        <h1>Notifications</h1>
+
+        <p class="subtitle">
+            Important updates and activity notifications from CantiQ.
+        </p>
+
+    </section>
+
+
+    <div class="actions">
+
+        <button onclick="markAllRead()">
+            Mark all as read
+        </button>
+
+    </div>
+
+
+    <div id="notificationContainer"></div>
+
+</main>
+
+
+<script>
+
+const notifications = [
+
+    {
+        id: 1,
+        icon: "🛒",
+        title: "Purchase Recorded",
+        message: "A canteen purchase has been successfully recorded.",
+        time: "Today",
+        new: true
+    },
+
+    {
+        id: 2,
+        icon: "✏️",
+        title: "Account Updated",
+        message: "Your CantiQ account information has been updated by an administrator.",
+        time: "Today",
+        new: false
+    },
+
+    {
+        id: 3,
+        icon: "🔔",
+        title: "Account Status Changed",
+        message: "Your account status has been updated successfully.",
+        time: "Today",
+        new: false
+    },
+
+    {
+        id: 4,
+        icon: "🍎",
+        title: "Food List Updated",
+        message: "The canteen food list has been updated.",
+        time: "Today",
+        new: true
+    }
+
+];
+
+
+function renderNotifications(){
+
+    const container =
+        document.getElementById("notificationContainer");
+
+    container.innerHTML = "";
+
+
+    notifications.forEach(notification => {
+
+        const isRead =
+            localStorage.getItem(
+                "notification_read_" + notification.id
+            ) === "true";
+
+
+        const card =
+            document.createElement("div");
+
+        card.className =
+            "notification" +
+            (isRead ? " read" : "");
+
+
+        card.innerHTML = `
+
+            <div class="icon">
+                ${notification.icon}
+            </div>
+
+            <div class="content">
+
+                <h3>
+                    ${notification.title}
+                </h3>
+
+                <p>
+                    ${notification.message}
+                </p>
+
+                <div class="time">
+                    ${notification.time}
+                </div>
+
+                ${
+                    !isRead
+                    ?
+                    `
+                    <button
+                        class="read-btn"
+                        onclick="markRead(${notification.id})"
+                    >
+                        Mark as read
+                    </button>
+                    `
+                    :
+                    ""
+                }
+
+            </div>
+
+            ${
+                !isRead && notification.new
+                ?
+                `<span class="badge">New</span>`
+                :
+                ""
+            }
+
+        `;
+
+
+        container.appendChild(card);
+
+    });
+
+}
+
+
+function markRead(id){
+
+    localStorage.setItem(
+        "notification_read_" + id,
+        "true"
+    );
+
+    renderNotifications();
+
+}
+
+
+function markAllRead(){
+
+    notifications.forEach(notification => {
+
+        localStorage.setItem(
+            "notification_read_" + notification.id,
+            "true"
+        );
+
+    });
+
+    renderNotifications();
+
+}
+
+
+renderNotifications();
+
+</script>
+
+</body>
+</html>

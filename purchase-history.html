@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CantiQ - Purchase History</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5f1e6;
+            color: #263126;
+        }
+
+        /* ================= TOP BAR ================= */
+
+        .topbar {
+            background: #536b3f;
+            color: white;
+            min-height: 82px;
+            padding: 16px 6%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+        }
+
+        .logo-box {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            background: #e8efd9;
+            color: #536b3f;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+        }
+
+        .logo-area h1 {
+            font-size: 25px;
+            margin-bottom: 3px;
+        }
+
+        .logo-area p {
+            font-size: 12px;
+            opacity: .8;
+        }
+
+        .back-btn {
+            color: white;
+            text-decoration: none;
+            border: 1px solid rgba(255,255,255,.5);
+            padding: 10px 17px;
+            border-radius: 10px;
+            font-size: 13px;
+        }
+
+        /* ================= PAGE ================= */
+
+        .page {
+            width: min(1180px, 92%);
+            margin: 30px auto 50px;
+        }
+
+        /* ================= HERO ================= */
+
+        .hero {
+            background: #536b3f;
+            color: white;
+            border-radius: 25px;
+            padding: 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 25px;
+            margin-bottom: 20px;
+        }
+
+        .hero-text {
+            max-width: 700px;
+        }
+
+        .hero-label {
+            display: inline-block;
+            background: #a8b98f;
+            color: #263126;
+            padding: 7px 12px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            margin-bottom: 14px;
+        }
+
+        .hero h2 {
+            font-size: 30px;
+            margin-bottom: 9px;
+        }
+
+        .hero p {
+            color: #e8efd9;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .hero-total {
+            background: #f7f3e8;
+            color: #263126;
+            min-width: 175px;
+            padding: 21px;
+            border-radius: 18px;
+            text-align: center;
+        }
+
+        .hero-total span {
+            display: block;
+            color: #68705f;
+            font-size: 11px;
+        }
+
+        .hero-total strong {
+            display: block;
+            color: #536b3f;
+            font-size: 30px;
+            margin-top: 7px;
+        }
+
+        /* ================= SUMMARY ================= */
+
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin-bottom: 20px;
+        }
+
+        .summary-card {
+            padding: 22px;
+            border-radius: 20px;
+            min-height: 135px;
+        }
+
+        .summary-card.one {
+            background: #dce7ce;
+        }
+
+        .summary-card.two {
+            background: #a8b98f;
+        }
+
+        .summary-card.three {
+            background: #eee3bd;
+        }
+
+        .summary-card span {
+            font-size: 10px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .summary-card h3 {
+            font-size: 28px;
+            margin: 18px 0 5px;
+        }
+
+        .summary-card p {
+            font-size: 11px;
+            color: #596251;
+        }
+
+        /* ================= HISTORY CARD ================= */
+
+        .history-card {
+            background: white;
+            border-radius: 22px;
+            padding: 27px;
+            box-shadow: 0 8px 25px rgba(54,63,46,.08);
+        }
+
+        .history-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .history-heading span {
+            color: #7a826f;
+            font-size: 10px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .history-heading h3 {
+            font-size: 21px;
+            margin-top: 5px;
+        }
+
+        .filter {
+            border: 1px solid #dce2d4;
+            background: #f5f7f1;
+            color: #536b3f;
+            padding: 9px 13px;
+            border-radius: 9px;
+            font-size: 11px;
+        }
+
+        /* ================= TABLE ================= */
+
+        .table-header,
+        .history-row {
+            display: grid;
+            grid-template-columns: 1.4fr 1.3fr 1.2fr .7fr;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .table-header {
+            background: #536b3f;
+            color: white;
+            padding: 13px 16px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: bold;
+            letter-spacing: .7px;
+        }
+
+        .history-row {
+            padding: 16px;
+            border-bottom: 1px solid #edf0e8;
+            font-size: 12px;
+        }
+
+        .history-row:last-child {
+            border-bottom: none;
+        }
+
+        .item {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+        }
+
+        .item-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: #dce7ce;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 19px;
+        }
+
+        .history-row:nth-child(3) .item-icon {
+            background: #eee3bd;
+        }
+
+        .item strong {
+            display: block;
+            font-size: 13px;
+        }
+
+        .item small {
+            color: #7a8275;
+            font-size: 10px;
+            display: block;
+            margin-top: 3px;
+        }
+
+        .date,
+        .canteen {
+            color: #697263;
+            font-size: 11px;
+        }
+
+        .amount {
+            color: #536b3f;
+            font-weight: bold;
+        }
+
+        /* ================= FOOTER ================= */
+
+        .history-footer {
+            margin-top: 20px;
+            background: #dce7ce;
+            border-radius: 18px;
+            padding: 18px 22px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .history-footer span {
+            font-size: 12px;
+            color: #596251;
+        }
+
+        .history-footer strong {
+            color: #536b3f;
+            font-size: 20px;
+        }
+
+        /* ================= MOBILE ================= */
+
+        @media (max-width: 800px) {
+
+            .hero {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .hero-total {
+                width: 100%;
+            }
+
+            .summary {
+                grid-template-columns: 1fr;
+            }
+
+            .table-header {
+                display: none;
+            }
+
+            .history-row {
+                grid-template-columns: 1fr 1fr;
+                background: #f7f8f3;
+                border-radius: 15px;
+                margin-bottom: 10px;
+                padding: 15px;
+            }
+
+            .history-row .item {
+                grid-column: 1 / -1;
+            }
+
+            .history-footer {
+                gap: 15px;
+            }
+        }
+
+        @media (max-width: 550px) {
+
+            .topbar {
+                padding: 14px 4%;
+            }
+
+            .page {
+                width: 94%;
+            }
+
+            .history-card {
+                padding: 18px;
+            }
+
+            .history-row {
+                grid-template-columns: 1fr;
+            }
+
+            .date,
+            .canteen,
+            .amount {
+                padding-left: 51px;
+            }
+
+            .history-footer {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+
+
+<body>
+
+<header class="topbar">
+
+    <div class="logo-area">
+
+        <div class="logo-box">
+            CQ
+        </div>
+
+        <div>
+            <h1>CantiQ</h1>
+            <p>Smart School Canteen</p>
+        </div>
+
+    </div>
+
+
+    <a href="dashboard.html" class="back-btn">
+        ← Dashboard
+    </a>
+
+</header>
+
+
+<main class="page">
+
+
+    <!-- HERO -->
+
+    <section class="hero">
+
+        <div class="hero-text">
+
+            <span class="hero-label">
+                TRANSACTION HISTORY
+            </span>
+
+            <h2>
+                Purchase History
+            </h2>
+
+            <p>
+                View your child's previous canteen purchases,
+                spending and transaction details in one place.
+            </p>
+
+        </div>
+
+
+        <div class="hero-total">
+
+            <span>
+                Total shown
+            </span>
+
+            <strong>
+                ₹130
+            </strong>
+
+        </div>
+
+    </section>
+
+
+    <!-- SUMMARY -->
+
+    <section class="summary">
+
+
+        <div class="summary-card one">
+
+            <span>
+                TOTAL PURCHASES
+            </span>
+
+            <h3>
+                3
+            </h3>
+
+            <p>
+                Transactions recorded
+            </p>
+
+        </div>
+
+
+        <div class="summary-card two">
+
+            <span>
+                TOTAL SPENT
+            </span>
+
+            <h3>
+                ₹130
+            </h3>
+
+            <p>
+                Across shown transactions
+            </p>
+
+        </div>
+
+
+        <div class="summary-card three">
+
+            <span>
+                MOST RECENT
+            </span>
+
+            <h3>
+                ₹40
+            </h3>
+
+            <p>
+                Fruit Juice • 12:35 PM
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- HISTORY -->
+
+    <section class="history-card">
+
+        <div class="history-heading">
+
+            <div>
+
+                <span>
+                    RECENT TRANSACTIONS
+                </span>
+
+                <h3>
+                    Your Purchases
+                </h3>
+
+            </div>
+
+            <button class="filter">
+                This Month ▾
+            </button>
+
+        </div>
+
+
+        <div class="table-header">
+
+            <div>ITEM</div>
+            <div>DATE & TIME</div>
+            <div>CANTEEN</div>
+            <div>AMOUNT</div>
+
+        </div>
+
+
+        <div class="history-row">
+
+            <div class="item">
+
+                <div class="item-icon">
+                    🧃
+                </div>
+
+                <div>
+                    <strong>
+                        Fruit Juice
+                    </strong>
+
+                    <small>
+                        Beverage
+                    </small>
+                </div>
+
+            </div>
+
+
+            <div class="date">
+                28 Sep • 12:35 PM
+            </div>
+
+
+            <div class="canteen">
+                Main Canteen
+            </div>
+
+
+            <div class="amount">
+                ₹40
+            </div>
+
+        </div>
+
+
+        <div class="history-row">
+
+            <div class="item">
+
+                <div class="item-icon">
+                    🥪
+                </div>
+
+                <div>
+                    <strong>
+                        Sandwich
+                    </strong>
+
+                    <small>
+                        Snack
+                    </small>
+                </div>
+
+            </div>
+
+
+            <div class="date">
+                28 Sep • 11:50 AM
+            </div>
+
+
+            <div class="canteen">
+                Main Canteen
+            </div>
+
+
+            <div class="amount">
+                ₹60
+            </div>
+
+        </div>
+
+
+        <div class="history-row">
+
+            <div class="item">
+
+                <div class="item-icon">
+                    🍎
+                </div>
+
+                <div>
+                    <strong>
+                        Fresh Fruit
+                    </strong>
+
+                    <small>
+                        Healthy Food
+                    </small>
+                </div>
+
+            </div>
+
+
+            <div class="date">
+                27 Sep • 01:05 PM
+            </div>
+
+
+            <div class="canteen">
+                Healthy Corner
+            </div>
+
+
+            <div class="amount">
+                ₹30
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- TOTAL -->
+
+    <section class="history-footer">
+
+        <span>
+            Total amount shown in this history

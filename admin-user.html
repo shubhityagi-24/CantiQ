@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CantiQ - User Management</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f6f1;
+            color: #263329;
+        }
+
+        .topbar {
+            background: #5d6f55;
+            color: white;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .subtitle {
+            font-size: 13px;
+            opacity: 0.9;
+            margin-top: 3px;
+        }
+
+        .topbar a {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .container {
+            width: 86%;
+            max-width: 1200px;
+            margin: 35px auto;
+        }
+
+        .back {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #5d6f55;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .hero {
+            background: white;
+            padding: 28px;
+            border-radius: 18px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 18px rgba(0,0,0,0.06);
+        }
+
+        .tag {
+            display: inline-block;
+            background: #e5ecdf;
+            color: #5d6f55;
+            padding: 7px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .hero h1 {
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+        .hero p {
+            color: #687268;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 25px;
+        }
+
+        .stat {
+            background: white;
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .stat span {
+            display: block;
+            color: #747d75;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .stat strong {
+            font-size: 25px;
+            color: #5d6f55;
+        }
+
+        .panel {
+            background: white;
+            padding: 24px;
+            border-radius: 18px;
+            box-shadow: 0 5px 18px rgba(0,0,0,0.06);
+        }
+
+        .toolbar {
+            display: flex;
+            gap: 12px;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filters {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            flex: 1;
+        }
+
+        input,
+        select {
+            padding: 11px 13px;
+            border: 1px solid #d8ddd5;
+            border-radius: 10px;
+            font-size: 14px;
+            outline: none;
+            background: white;
+        }
+
+        input {
+            min-width: 240px;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #5d6f55;
+        }
+
+        button {
+            border: none;
+            border-radius: 10px;
+            padding: 11px 16px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .primary {
+            background: #5d6f55;
+            color: white;
+        }
+
+        .primary:hover {
+            background: #4e6048;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 750px;
+        }
+
+        th {
+            background: #f1f4ee;
+            color: #586259;
+            font-size: 13px;
+            text-align: left;
+            padding: 14px;
+        }
+
+        td {
+            padding: 15px 14px;
+            border-bottom: 1px solid #edf0eb;
+            font-size: 14px;
+        }
+
+        .status {
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .active {
+            background: #e3f1e2;
+            color: #3e7040;
+        }
+
+        .inactive {
+            background: #f1e4e4;
+            color: #8a4b4b;
+        }
+
+        .actions {
+            display: flex;
+            gap: 7px;
+            flex-wrap: wrap;
+        }
+
+        .edit-btn {
+            background: #e8eee5;
+            color: #52644c;
+        }
+
+        .status-btn {
+            background: #f0eee1;
+            color: #716a42;
+        }
+
+        .delete-btn {
+            background: #f4e4e4;
+            color: #8a4d4d;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 35px;
+            color: #7a827b;
+            display: none;
+        }
+
+        .note {
+            margin-top: 22px;
+            padding: 15px;
+            background: #f3f6f0;
+            border-left: 4px solid #5d6f55;
+            border-radius: 8px;
+            color: #687268;
+            font-size: 13px;
+        }
+
+        /* Modal */
+
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(20, 30, 20, 0.45);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 10;
+        }
+
+        .modal-box {
+            background: white;
+            width: 100%;
+            max-width: 450px;
+            padding: 28px;
+            border-radius: 18px;
+        }
+
+        .modal-box h2 {
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 7px;
+            color: #59635a;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .cancel-btn {
+            background: #edf0eb;
+            color: #59635a;
+        }
+
+        @media (max-width: 800px) {
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .container {
+                width: 92%;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .hero h1 {
+                font-size: 25px;
+            }
+
+            input {
+                min-width: 100%;
+            }
+
+            .filters {
+                width: 100%;
+            }
+
+            .toolbar .primary {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="topbar">
+        <div>
+            <div class="brand">CantiQ</div>
+            <div class="subtitle">Admin Management Portal</div>
+        </div>
+
+        <a href="admin-dashboard.html">Dashboard</a>
+    </div>
+
+    <div class="container">
+
+        <a class="back" href="admin-dashboard.html">← Back to Admin Dashboard</a>
+
+        <section class="hero">
+            <div class="tag">USER MANAGEMENT</div>
+            <h1>Manage Users</h1>
+            <p>View, add, edit and manage CantiQ user accounts.</p>
+        </section>
+
+        <section class="stats">
+            <div class="stat">
+                <span>Total Users</span>
+                <strong id="totalUsers">0</strong>
+            </div>
+
+            <div class="stat">
+                <span>Parent / Student</span>
+                <strong id="parentUsers">0</strong>
+            </div>
+
+            <div class="stat">
+                <span>Active Users</span>
+                <strong id="activeUsers">0</strong>
+            </div>
+
+            <div class="stat">
+                <span>Inactive Users</span>
+                <strong id="inactiveUsers">0</strong>
+            </div>
+        </section>
+
+        <section class="panel">
+
+            <div class="toolbar">
+
+                <div class="filters">
+
+                    <input
+                        type="text"
+                        id="searchInput"
+                        placeholder="Search by name or school..."
+                    >
+
+                    <select id="roleFilter">
+                        <option value="all">All Roles</option>
+                        <option value="parent">Parent / Student</option>
+                        <option value="canteen">Canteen</option>
+                        <option value="admin">Admin</option>
+                    </select>
+
+                </div>
+
+                <button class="primary" id="addUserBtn">
+                    + Add User
+                </button>
+
+            </div>
+
+            <div class="table-wrap">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Role</th>
+                            <th>School</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="userTable"></tbody>
+
+                </table>
+
+                <div class="empty" id="emptyMessage">
+                    No users found.
+                </div>
+
+            </div>
+
+            <div class="note">
+                <strong>Prototype note:</strong>
+                User changes are currently stored in this browser using localStorage.
+                Secure account authentication, permissions and database storage will
+                be connected through the backend in the final system.
+            </div>
+
+        </section>
+
+    </div>
+
+
+    <!-- ADD / EDIT USER MODAL -->
+
+    <div class="modal" id="userModal">
+
+        <div class="modal-box">
+
+            <h2 id="modalTitle">Add User</h2>
+
+            <div class="form-group">
+                <label for="userName">Name</label>
+                <input type="text" id="userName" placeholder="Enter name">
+            </div>
+
+            <div class="form-group">
+                <label for="userRole">Role</label>
+
+                <select id="userRole">
+                    <option value="parent">Parent / Student</option>
+                    <option value="canteen">Canteen</option>
+                    <option value="admin">Admin</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="userSchool">School</label>
+                <input
+                    type="text"
+                    id="userSchool"
+                    placeholder="Enter school name"
+                >
+            </div>
+  
+             <div class="form-group">
+    <label for="userPassword">Temporary Password</label>
+    <input
+        type="text"
+        id="userPassword"
+        readonly
+        placeholder="Generated automatically"
+    >
+</div>
+
+            <div class="modal-actions">
+
+                <button class="cancel-btn" id="cancelBtn">
+                    Cancel
+                </button>
+
+                <button class="primary" id="saveUserBtn">
+                    Save User
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        const storageKey = "cantiqUsers";
+
+        const defaultUsers = [
+            {
+                id: 1,
+                name: "Aarav Sharma",
+                role: "parent",
+                school: "Surevin International School",
+                active: true
+            },
+            {
+                id: 2,
+                name: "Meera Kapoor",
+                role: "parent",
+                school: "Surevin International School",
+                active: true
+            },
+            {
+                id: 3,
+                name: "Main Canteen",
+                role: "canteen",
+                school: "Surevin International School",
+                active: true
+            },
+            {
+                id: 4,
+                name: "Admin Account",
+                role: "admin",
+                school: "Surevin International School",
+                active: true
+            }
+        ];
+
+        let users = JSON.parse(localStorage.getItem(storageKey));
+
+        if (!users) {
+            users = defaultUsers;
+            saveUsers();
+        }
+
+        let editingUserId = null;
+
+
+        function saveUsers() {
+            localStorage.setItem(storageKey, JSON.stringify(users));
+        }
+
+
+        function roleText(role) {
+
+            if (role === "parent") {
+                return "Parent / Student";
+            }
+
+            if (role === "canteen") {
+                return "Canteen";
+            }
+
+            if (role === "admin") {
+                return "Admin";
+            }
+
+            return role;
+        }
+
+
+        function updateStats() {
+
+            document.getElementById("totalUsers").textContent =
+                users.length;
+
+            document.getElementById("parentUsers").textContent =
+                users.filter(user => user.role === "parent").length;
+
+            document.getElementById("activeUsers").textContent =
+                users.filter(user => user.active).length;
+
+            document.getElementById("inactiveUsers").textContent =
+                users.filter(user => !user.active).length;
+        }
+
+
+        function renderUsers() {
+
+            const table = document.getElementById("userTable");
+            const emptyMessage = document.getElementById("emptyMessage");
+
+            const search =
+                document.getElementById("searchInput")
+                .value
+                .toLowerCase()
+                .trim();
+
+            const role =
+                document.getElementById("roleFilter").value;
+
+
+            const filteredUsers = users.filter(user => {
+
+                const matchesSearch =
+                    user.name.toLowerCase().includes(search) ||
+                    user.school.toLowerCase().includes(search);
+
+                const matchesRole =
+                    role === "all" ||
+                    user.role === role;
+
+                return matchesSearch && matchesRole;
+            });
+
+
+            table.innerHTML = "";
+
+
+            if (filteredUsers.length === 0) {
+
+                emptyMessage.style.display = "block";
+
+            } else {
+
+                emptyMessage.style.display = "none";
+
+                filteredUsers.forEach(user => {
+
+                    const row = document.createElement("tr");
+
+                    row.innerHTML = `
+                        <td><strong>${user.name}</strong></td>
+
+                        <td>${roleText(user.role)}</td>
+
+                        <td>${user.school}</td>
+
+                        <td>
+                            <span class="status ${user.active ? "active" : "inactive"}">
+                                ${user.active ? "Active" : "Inactive"}
+                            </span>
+                        </td>
+
+                        <td>
+                            <div class="actions">
+
+                                <button
+                                    class="edit-btn"
+                                    onclick="editUser(${user.id})">
+                                    Edit
+                                </button>
+
+                                <button
+                                    class="status-btn"
+                                    onclick="toggleStatus(${user.id})">
+                                    ${user.active ? "Deactivate" : "Activate"}
+                                </button>
+
+                                <button
+                                    class="delete-btn"
+                                    onclick="deleteUser(${user.id})">
+                                    Delete
+                                </button>
+
+                            </div>
+                        </td>
+                    `;
+
+                    table.appendChild(row);
+                });
+            }
+
+            updateStats();
+        }
+
+
+        function openAddModal() {
+
+            editingUserId = null;
+
+            document.getElementById("modalTitle").textContent =
+                "Add User";
+
+            document.getElementById("userName").value = "";
+            document.getElementById("userRole").value = "parent";
+            document.getElementById("userSchool").value = "";
+document.getElementById("userPassword").value =
+    "CQ-" + Math.floor(1000 + Math.random() * 9000);
+            document.getElementById("userModal").style.display = "flex";
+        }
+
+
+        function editUser(id) {
+
+            const user = users.find(user => user.id === id);
+
+            if (!user) return;
+
+            editingUserId = id;
+
+            document.getElementById("modalTitle").textContent =
+                "Edit User";
+
+            document.getElementById("userName").value =
+                user.name;
+
+            document.getElementById("userRole").value =
+                user.role;
+
+            document.getElementById("userSchool").value =
+                user.school;
+
+            document.getElementById("userModal").style.display =
+                "flex";
+        }
+
+
+        function closeModal() {
+
+            document.getElementById("userModal").style.display =
+                "none";
+
+            editingUserId = null;
+        }
+
+
+        function saveUser() {
+
+            const name =
+                document.getElementById("userName").value.trim();
+
+            const role =
+                document.getElementById("userRole").value;
+
+            const school =
+                document.getElementById("userSchool").value.trim();
+
+
+            if (!name || !school) {
+
+                alert("Please enter the name and school.");
+
+                return;
+            }
+
+
+            if (editingUserId !== null) {
+
+                const user =
+                    users.find(user => user.id === editingUserId);
+
+                user.name = name;
+                user.role = role;
+                user.school = school;
+
+            } else {
+
+                const newUser = {
+
+                    id: Date.now(),
+
+                    name: name,
+
+                    role: role,
+
+                    school: school,
+password: document.getElementById("userPassword").value,
+                    active: true
+                };
+
+                users.push(newUser);
+            }
+
+
+            saveUsers();
+
+            renderUsers();
+
+            closeModal();
+        }
+
+
+        function toggleStatus(id) {
+
+            const user =
+                users.find(user => user.id === id);
+
+            if (!user) return;
+
+            user.active = !user.active;
+
+            saveUsers();
+
+            renderUsers();
+        }
+
+
+        function deleteUser(id) {
+
+            const user =
+                users.find(user => user.id === id);
+
+            if (!user) return;
+
+
+            const confirmed =
+                confirm(
+                    "Are you sure you want to delete " +
+                    user.name +
+                    "?"
+                );
+
+
+            if (!confirmed) return;
+
+
+            users =
+                users.filter(user => user.id !== id);
+
+            saveUsers();
+
+            renderUsers();
+        }
+
+
+        document
+            .getElementById("addUserBtn")
+            .addEventListener("click", openAddModal);
+
+
+        document
+            .getElementById("cancelBtn")
+            .addEventListener("click", closeModal);
+
+
+        document
+            .getElementById("saveUserBtn")
+            .addEventListener("click", saveUser);
+
+
+        document
+            .getElementById("searchInput")
+            .addEventListener("input", renderUsers);
+
+
+        document
+            .getElementById("roleFilter")
+            .addEventListener("change", renderUsers);
+
+
+        document
+            .getElementById("userModal")
+            .addEventListener("click", function(event) {
+
+                if (event.target === this) {
+                    closeModal();
+                }
+            });
+
+        renderUsers();
+    </script>
+
+</body>
+</html>

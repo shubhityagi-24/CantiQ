@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CantiQ - School Management</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f6f1;
+            color: #293329;
+        }
+
+        .topbar {
+            background: #5d6f55;
+            color: white;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .subtitle {
+            font-size: 13px;
+            margin-top: 4px;
+        }
+
+        .topbar a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .container {
+            width: 86%;
+            max-width: 1200px;
+            margin: 35px auto;
+        }
+
+        .back {
+            color: #5d6f55;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .hero,
+        .panel,
+        .stat {
+            background: white;
+            border-radius: 18px;
+            box-shadow: 0 5px 18px rgba(0,0,0,0.06);
+        }
+
+        .hero {
+            padding: 28px;
+            margin-bottom: 25px;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #e5ecdf;
+            color: #5d6f55;
+            padding: 7px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .hero h1 {
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+        .hero p {
+            color: #687268;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 25px;
+        }
+
+        .stat {
+            padding: 20px;
+        }
+
+        .stat span {
+            display: block;
+            color: #747d75;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .stat strong {
+            font-size: 25px;
+            color: #5d6f55;
+        }
+
+        .panel {
+            padding: 24px;
+        }
+
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .search {
+            flex: 1;
+        }
+
+        input {
+            width: 100%;
+            max-width: 400px;
+            padding: 11px 13px;
+            border: 1px solid #d8ddd5;
+            border-radius: 10px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        button {
+            border: none;
+            border-radius: 10px;
+            padding: 11px 15px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .primary {
+            background: #5d6f55;
+            color: white;
+        }
+
+        .edit {
+            background: #e8eee5;
+            color: #52644c;
+        }
+
+        .status-btn {
+            background: #f0eee1;
+            color: #716a42;
+        }
+
+        .delete {
+            background: #f4e4e4;
+            color: #8a4d4d;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 700px;
+        }
+
+        th {
+            background: #f1f4ee;
+            padding: 14px;
+            text-align: left;
+            font-size: 13px;
+        }
+
+        td {
+            padding: 15px 14px;
+            border-bottom: 1px solid #edf0eb;
+            font-size: 14px;
+        }
+
+        .status {
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .active {
+            background: #e3f1e2;
+            color: #3e7040;
+        }
+
+        .inactive {
+            background: #f1e4e4;
+            color: #8a4b4b;
+        }
+
+        .actions {
+            display: flex;
+            gap: 7px;
+            flex-wrap: wrap;
+        }
+
+        .empty {
+            display: none;
+            text-align: center;
+            padding: 30px;
+            color: #777;
+        }
+
+        .note {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f3f6f0;
+            border-left: 4px solid #5d6f55;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #687268;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.45);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-box {
+            background: white;
+            width: 100%;
+            max-width: 450px;
+            padding: 28px;
+            border-radius: 18px;
+        }
+
+        .modal-box h2 {
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 7px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .form-group input {
+            max-width: none;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .cancel {
+            background: #edf0eb;
+            color: #59635a;
+        }
+
+        @media (max-width: 700px) {
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                width: 92%;
+            }
+
+            .toolbar .primary {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="topbar">
+        <div>
+            <div class="brand">CantiQ</div>
+            <div class="subtitle">Admin Management Portal</div>
+        </div>
+
+        <a href="admin-dashboard.html">Dashboard</a>
+    </div>
+
+
+    <div class="container">
+
+        <a class="back" href="admin-dashboard.html">
+            ← Back to Admin Dashboard
+        </a>
+
+
+        <div class="hero">
+
+            <div class="tag">SCHOOL MANAGEMENT</div>
+
+            <h1>Manage Schools</h1>
+
+            <p>
+                Add and manage schools connected to the CantiQ system.
+            </p>
+
+        </div>
+
+
+        <div class="stats">
+
+            <div class="stat">
+                <span>Total Schools</span>
+                <strong id="totalSchools">0</strong>
+            </div>
+
+            <div class="stat">
+                <span>Active Schools</span>
+                <strong id="activeSchools">0</strong>
+            </div>
+
+            <div class="stat">
+                <span>Inactive Schools</span>
+                <strong id="inactiveSchools">0</strong>
+            </div>
+
+        </div>
+
+
+        <div class="panel">
+
+            <div class="toolbar">
+
+                <div class="search">
+                    <input
+                        type="text"
+                        id="searchInput"
+                        placeholder="Search schools..."
+                    >
+                </div>
+
+                <button
+                    class="primary"
+                    id="addSchoolButton"
+                >
+                    + Add School
+                </button>
+
+            </div>
+
+
+            <div class="table-wrap">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>School Name</th>
+                            <th>Location</th>
+                            <th>Canteens</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="schoolTable"></tbody>
+
+                </table>
+
+                <div
+                    class="empty"
+                    id="emptyMessage"
+                >
+                    No schools found.
+                </div>
+
+            </div>
+
+
+            <div class="note">
+
+                <strong>Prototype:</strong>
+                School information is currently saved in this browser.
+                In the final system, school data will be stored securely
+                in the backend database.
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ADD / EDIT SCHOOL -->
+
+    <div
+        class="modal"
+        id="schoolModal"
+    >
+
+        <div class="modal-box">
+
+            <h2 id="modalTitle">
+                Add School
+            </h2>
+
+
+            <div class="form-group">
+
+                <label>School Name</label>
+
+                <input
+                    type="text"
+                    id="schoolName"
+                    placeholder="Enter school name"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Location</label>
+
+                <input
+                    type="text"
+                    id="schoolLocation"
+                    placeholder="Enter city"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Number of Canteens</label>
+
+                <input
+                    type="number"
+                    id="schoolCanteens"
+                    min="0"
+                    placeholder="Enter number"
+                >
+
+            </div>
+
+
+            <div class="modal-buttons">
+
+                <button
+                    class="cancel"
+                    id="cancelButton"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    class="primary"
+                    id="saveButton"
+                >
+                    Save School
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        const storageKey = "cantiqSchools";
+
+        const defaultSchools = [
+
+            {
+                id: 1,
+                name: "Surevin International School",
+                location: "Niwari",
+                canteens: 1,
+                active: true
+            }
+
+        ];
+
+
+        let schools =
+            JSON.parse(
+                localStorage.getItem(storageKey)
+            ) || defaultSchools;
+
+
+        let editingId = null;
+
+
+        function saveSchools() {
+
+            localStorage.setItem(
+                storageKey,
+                JSON.stringify(schools)
+            );
+
+        }
+
+
+        function renderSchools() {
+
+            const table =
+                document.getElementById("schoolTable");
+
+            const empty =
+                document.getElementById("emptyMessage");
+
+            const search =
+                document
+                .getElementById("searchInput")
+                .value
+                .toLowerCase();
+
+
+            const filtered =
+                schools.filter(function(school) {
+
+                    return school.name
+                        .toLowerCase()
+                        .includes(search);
+
+                });
+
+
+            table.innerHTML = "";
+
+
+            if (filtered.length === 0) {
+
+                empty.style.display = "block";
+
+            } else {
+
+                empty.style.display = "none";
+
+
+                filtered.forEach(function(school) {
+
+                    const row =
+                        document.createElement("tr");
+
+
+                    row.innerHTML = `
+
+                        <td>
+                            <strong>${school.name}</strong>
+                        </td>
+
+                        <td>
+                            ${school.location}
+                        </td>
+
+                        <td>
+                            ${school.canteens}
+                        </td>
+
+                        <td>
+
+                            <span class="status ${
+                                school.active
+                                ? "active"
+                                : "inactive"
+                            }">
+
+                                ${
+                                    school.active
+                                    ? "Active"
+                                    : "Inactive"
+                                }
+
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <div class="actions">
+
+                                <button
+                                    class="edit"
+                                    data-action="edit"
+                                    data-id="${school.id}"
+                                >
+                                    Edit
+                                </button>
+
+                                <button
+                                    class="status-btn"
+                                    data-action="status"
+                                    data-id="${school.id}"
+                                >
+                                    ${
+                                        school.active
+                                        ? "Deactivate"
+                                        : "Activate"
+                                    }
+                                </button>
+
+                                <button
+                                    class="delete"
+                                    data-action="delete"
+                                    data-id="${school.id}"
+                                >
+                                    Delete
+                                </button>
+
+                            </div>
+
+                        </td>
+
+                    `;
+
+
+                    table.appendChild(row);
+
+                });
+
+            }
+
+
+            document.getElementById("totalSchools").textContent =
+                schools.length;
+
+
+            document.getElementById("activeSchools").textContent =
+                schools.filter(function(school) {
+                    return school.active;
+                }).length;
+
+
+            document.getElementById("inactiveSchools").textContent =
+                schools.filter(function(school) {
+                    return !school.active;
+                }).length;
+
+        }
+
+
+        function openAddSchool() {
+
+            editingId = null;
+
+            document.getElementById("modalTitle").textContent =
+                "Add School";
+
+            document.getElementById("schoolName").value = "";
+
+            document.getElementById("schoolLocation").value = "";
+
+            document.getElementById("schoolCanteens").value = "";
+
+            document.getElementById("schoolModal").style.display =
+                "flex";
+
+        }
+
+
+        function openEditSchool(id) {
+
+            const school =
+                schools.find(function(item) {
+                    return item.id === id;
+                });
+
+
+            if (!school) {
+                return;
+            }
+
+
+            editingId = id;
+
+            document.getElementById("modalTitle").textContent =
+                "Edit School";
+
+            document.getElementById("schoolName").value =
+                school.name;
+
+            document.getElementById("schoolLocation").value =
+                school.location;
+
+            document.getElementById("schoolCanteens").value =
+                school.canteens;
+
+            document.getElementById("schoolModal").style.display =
+                "flex";
+
+        }
+
+
+        function closeModal() {
+
+            document.getElementById("schoolModal").style.display =
+                "none";
+
+        }
+
+
+        function saveSchool() {
+
+            const name =
+                document.getElementById("schoolName")
+                .value
+                .trim();
+
+            const location =
+                document.getElementById("schoolLocation")
+                .value
+                .trim();
+
+            const canteens =
+                document.getElementById("schoolCanteens")
+                .value;
+
+
+            if (
+                name === "" ||
+                location === "" ||
+                canteens === ""
+            ) {
+
+                alert(
+                    "Please fill in all school details."
+                );
+
+                return;
+            }
+
+
+            if (editingId !== null) {
+
+                const school =
+                    schools.find(function(item) {
+                        return item.id === editingId;
+                    });
+
+
+                school.name = name;
+                school.location = location;
+                school.canteens = Number(canteens);
+
+            } else {
+
+                schools.push({
+
+                    id: Date.now(),
+
+                    name: name,
+
+                    location: location,
+
+                    canteens: Number(canteens),
+
+                    active: true
+
+                });
+
+            }
+
+
+            saveSchools();
+
+            renderSchools();
+
+            closeModal();
+
+        }
+
+
+        function changeStatus(id) {
+
+            const school =
+                schools.find(function(item) {
+                    return item.id === id;
+                });
+
+
+            if (!school) {
+                return;
+            }
+
+
+            school.active = !school.active;
+
+            saveSchools();
+
+            renderSchools();
+
+        }
+
+
+        function deleteSchool(id) {
+
+            const school =
+                schools.find(function(item) {
+                    return item.id === id;
+                });
+
+
+            if (!school) {
+                return;
+            }
+
+
+            const answer =
+                confirm(
+                    "Delete " +
+                    school.name +
+                    "?"
+                );
+
+
+            if (!answer) {
+                return;
+            }
+
+
+            schools =
+                schools.filter(function(item) {
+                    return item.id !== id;
+                });
+
+
+            saveSchools();
+
+            renderSchools();
+
+        }
+
+
+        document
+            .getElementById("addSchoolButton")
+            .addEventListener(
+                "click",
+                openAddSchool
+            );
+
+
+        document
+            .getElementById("cancelButton")
+            .addEventListener(
+                "click",
+                closeModal
+            );
+
+
+        document
+            .getElementById("saveButton")
+            .addEventListener(
+                "click",
+                saveSchool
+            );
+
+
+        document
+            .getElementById("searchInput")
+            .addEventListener(
+                "input",
+                renderSchools
+            );
+
+
+        document
+            .getElementById("schoolTable")
+            .addEventListener(
+                "click",
+                function(event) {
+
+                    const button =
+                        event.target.closest("button");
+
+
+                    if (!button) {
+                        return;
+                    }
+
+
+                    const id =
+                        Number(button.dataset.id);
+
+                    const action =
+                        button.dataset.action;
+
+
+                    if (action === "edit") {
+                        openEditSchool(id);
+                    }
+
+                    if (action === "status") {
+                        changeStatus(id);
+                    }
+
+                    if (action === "delete") {
+                        deleteSchool(id);
+                    }
+
+                }
+            );
+
+
+        document
+            .getElementById("schoolModal")
+            .addEventListener(
+                "click",
+                function(event) {
+
+                    if (event.target === this) {
+                        closeModal();
+                    }
+
+                }
+            );
+
+
+        renderSchools();
+
+    </script>
+
+</body>
+</html>

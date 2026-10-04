@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CantiQ - Food List</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5f1e6;
+            color: #263126;
+        }
+
+        .topbar {
+            background: #536b3f;
+            color: white;
+            min-height: 82px;
+            padding: 16px 6%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+        }
+
+        .logo {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            background: #e8efd9;
+            color: #536b3f;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+        }
+
+        .brand h1 {
+            font-size: 25px;
+        }
+
+        .brand p {
+            font-size: 12px;
+            opacity: .8;
+            margin-top: 3px;
+        }
+
+        .back-btn {
+            color: white;
+            text-decoration: none;
+            border: 1px solid rgba(255,255,255,.5);
+            padding: 10px 17px;
+            border-radius: 10px;
+            font-size: 13px;
+        }
+
+        .page {
+            width: min(1100px, 92%);
+            margin: 30px auto 50px;
+        }
+
+        .hero {
+            background: #536b3f;
+            color: white;
+            border-radius: 25px;
+            padding: 32px;
+            margin-bottom: 20px;
+        }
+
+        .label {
+            display: inline-block;
+            background: #a8b98f;
+            color: #263126;
+            padding: 7px 12px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            margin-bottom: 13px;
+        }
+
+        .hero h2 {
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+        .hero p {
+            color: #e8efd9;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .toolbar {
+            background: white;
+            border-radius: 18px;
+            padding: 17px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 7px 22px rgba(54,63,46,.07);
+        }
+
+        .item-count {
+            color: #697263;
+            font-size: 12px;
+        }
+
+        .item-count strong {
+            color: #536b3f;
+            font-size: 20px;
+        }
+
+        .add-btn {
+            border: none;
+            background: #536b3f;
+            color: white;
+            padding: 11px 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .food-list {
+            background: white;
+            border-radius: 22px;
+            padding: 24px;
+            box-shadow: 0 7px 22px rgba(54,63,46,.07);
+        }
+
+        .list-heading {
+            margin-bottom: 18px;
+        }
+
+        .list-heading span {
+            color: #7b8374;
+            font-size: 10px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .list-heading h3 {
+            font-size: 20px;
+            margin-top: 5px;
+        }
+
+        .food-row {
+            display: grid;
+            grid-template-columns: 1.5fr .7fr .9fr 1fr;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 8px;
+            border-bottom: 1px solid #edf0e8;
+        }
+
+        .food-row:last-child {
+            border-bottom: none;
+        }
+
+        .food-name {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .food-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: #dce7ce;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .food-name strong {
+            font-size: 13px;
+        }
+
+        .food-name small {
+            display: block;
+            color: #7b8374;
+            font-size: 9px;
+            margin-top: 4px;
+        }
+
+        .price {
+            color: #536b3f;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        .stock {
+            color: #697263;
+            font-size: 11px;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 9px;
+            font-weight: bold;
+        }
+
+        .available {
+            background: #dce7ce;
+            color: #536b3f;
+        }
+
+        .unavailable {
+            background: #ecebe5;
+            color: #7b7b72;
+        }
+
+        .actions {
+            display: flex;
+            gap: 7px;
+            margin-top: 8px;
+        }
+
+        .edit-btn,
+        .delete-btn {
+            border: none;
+            padding: 7px 10px;
+            border-radius: 8px;
+            font-size: 10px;
+            cursor: pointer;
+        }
+
+        .edit-btn {
+            background: #e8efd9;
+            color: #536b3f;
+        }
+
+        .delete-btn {
+            background: #f1ece1;
+            color: #786b55;
+        }
+
+        .note {
+            margin-top: 20px;
+            background: #eee3bd;
+            border-radius: 17px;
+            padding: 18px 20px;
+            font-size: 11px;
+            color: #686753;
+            line-height: 1.6;
+        }
+
+        /* FORM */
+
+        .form-box {
+            display: none;
+            background: white;
+            border-radius: 22px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 7px 22px rgba(54,63,46,.07);
+        }
+
+        .form-box h3 {
+            font-size: 20px;
+            margin-bottom: 18px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group label {
+            font-size: 10px;
+            font-weight: bold;
+            color: #697263;
+        }
+
+        .form-group input,
+        .form-group select {
+            border: 1px solid #dce2d5;
+            border-radius: 9px;
+            padding: 10px;
+            font-size: 12px;
+            outline: none;
+        }
+
+        .form-buttons {
+            margin-top: 18px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .save-btn,
+        .cancel-btn {
+            border: none;
+            padding: 10px 17px;
+            border-radius: 9px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .save-btn {
+            background: #536b3f;
+            color: white;
+        }
+
+        .cancel-btn {
+            background: #ecebe5;
+            color: #596052;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 35px;
+            color: #7b8374;
+            font-size: 12px;
+        }
+
+        @media (max-width: 750px) {
+
+            .food-row {
+                grid-template-columns: 1fr 1fr;
+                background: #f8f9f5;
+                border-radius: 14px;
+                margin-bottom: 10px;
+                padding: 15px;
+            }
+
+            .food-name {
+                grid-column: 1 / -1;
+            }
+
+            .food-list {
+                padding: 17px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 500px) {
+
+            .topbar {
+                padding: 14px 4%;
+            }
+
+            .page {
+                width: 94%;
+            }
+
+            .hero h2 {
+                font-size: 25px;
+            }
+
+            .toolbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .add-btn {
+                width: 100%;
+            }
+
+            .food-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <div class="brand">
+
+        <div class="logo">
+            CQ
+        </div>
+
+        <div>
+            <h1>CantiQ</h1>
+            <p>Canteen Management Portal</p>
+        </div>
+
+    </div>
+
+    <a href="canteen-dashboard.html" class="back-btn">
+        ← Dashboard
+    </a>
+
+</header>
+
+
+<main class="page">
+
+    <section class="hero">
+
+        <span class="label">
+            MENU MANAGEMENT
+        </span>
+
+        <h2>
+            Food List
+        </h2>
+
+        <p>
+            Manage the food items available in your canteen,
+            including prices, stock and availability.
+        </p>
+
+    </section>
+
+
+    <section class="toolbar">
+
+        <div class="item-count">
+            <strong id="itemCount">0</strong> food items listed
+        </div>
+
+        <button class="add-btn" onclick="openForm()">
+            + Add Food Item
+        </button>
+
+    </section>
+
+
+    <section class="form-box" id="formBox">
+
+        <h3 id="formTitle">
+            Add Food Item
+        </h3>
+
+        <div class="form-grid">
+
+            <div class="form-group">
+                <label>Food Name</label>
+                <input type="text" id="foodName" placeholder="e.g. Samosa">
+            </div>
+
+            <div class="form-group">
+                <label>Description</label>
+                <input type="text" id="foodDescription" placeholder="e.g. Fresh snack">
+            </div>
+
+            <div class="form-group">
+                <label>Price (₹)</label>
+                <input type="number" id="foodPrice" placeholder="30">
+            </div>
+
+            <div class="form-group">
+                <label>Stock</label>
+                <input type="number" id="foodStock" placeholder="20">
+            </div>
+
+            <div class="form-group">
+                <label>Icon</label>
+                <input type="text" id="foodIcon" placeholder="🍎">
+            </div>
+
+            <div class="form-group">
+                <label>Status</label>
+
+                <select id="foodStatus">
+                    <option value="Available">Available</option>
+                    <option value="Unavailable">Unavailable</option>
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <div class="form-buttons">
+
+            <button class="save-btn" onclick="saveFood()">
+                Save Food
+            </button>
+
+            <button class="cancel-btn" onclick="closeForm()">
+                Cancel
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <section class="food-list">
+
+        <div class="list-heading">
+
+            <span>
+                CANTEEN MENU
+            </span>
+
+            <h3>
+                Available Food Items
+            </h3>
+
+        </div>
+
+        <div id="foodContainer">
+
+            <div class="empty">
+                Loading food items...
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <div class="note">
+
+        💡 <strong>Note:</strong>
+        Food items, prices and stock are connected to the
+        CantiQ backend. Changes made here can also appear
+        on the Allowed Food page.
+
+    </div>
+
+</main>
+
+
+<script>
+
+let foods = [];
+let editingId = null;
+
+
+async function loadFoods() {
+
+    try {
+
+        const response = await fetch("/api/foods");
+
+        foods = await response.json();
+
+        renderFoods();
+
+    } catch (error) {
+
+        document.getElementById("foodContainer").innerHTML =
+            '<div class="empty">Unable to connect to CantiQ backend.</div>';
+
+    }
+
+}
+
+
+function renderFoods() {
+
+    const container =
+        document.getElementById("foodContainer");
+
+    document.getElementById("itemCount").textContent =
+        foods.length;
+
+
+    if (foods.length === 0) {
+
+        container.innerHTML =
+            '<div class="empty">No food items added yet.</div>';
+
+        return;
+    }
+
+
+    container.innerHTML = foods.map(food => `
+
+        <div class="food-row">
+
+            <div class="food-name">
+
+                <div class="food-icon">
+                    ${food.icon || "🍽️"}
+                </div>
+
+                <div>
+
+                    <strong>
+                        ${food.name}
+                    </strong>
+
+                    <small>
+                        ${food.description || "Food item"}
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <div class="price">
+                ₹${food.price}
+            </div>
+
+
+            <div class="stock">
+                ${food.stock} units
+            </div>
+
+
+            <div>
+
+                <span class="status ${
+                    food.status === "Available"
+                    ? "available"
+                    : "unavailable"
+                }">
+
+                    ${food.status}
+
+                </span>
+
+
+                <div class="actions">
+
+                    <button
+                        class="edit-btn"
+                        onclick="editFood(${food.id})"
+                    >
+                        Edit
+                    </button>
+
+                    <button
+                        class="delete-btn"
+                        onclick="deleteFood(${food.id})"
+                    >
+                        Delete
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    `).join("");
+
+}
+
+
+function openForm() {
+
+    editingId = null;
+
+    document.getElementById("formTitle").textContent =
+        "Add Food Item";
+
+    document.getElementById("foodName").value = "";
+    document.getElementById("foodDescription").value = "";
+    document.getElementById("foodPrice").value = "";
+    document.getElementById("foodStock").value = "";
+    document.getElementById("foodIcon").value = "🍽️";
+    document.getElementById("foodStatus").value = "Available";
+
+    document.getElementById("formBox").style.display = "block";
+
+    document.getElementById("foodName").focus();
+
+}
+
+
+function closeForm() {
+
+    document.getElementById("formBox").style.display = "none";
+
+    editingId = null;
+
+}
+
+
+function editFood(id) {
+
+    const food =
+        foods.find(item => item.id === id);
+
+    if (!food) return;
+
+
+    editingId = id;
+
+    document.getElementById("formTitle").textContent =
+        "Edit Food Item";
+
+    document.getElementById("foodName").value =
+        food.name;
+
+    document.getElementById("foodDescription").value =
+        food.description;
+
+    document.getElementById("foodPrice").value =
+        food.price;
+
+    document.getElementById("foodStock").value =
+        food.stock;
+
+    document.getElementById("foodIcon").value =
+        food.icon;
+
+    document.getElementById("foodStatus").value =
+        food.status;
+
+
+    document.getElementById("formBox").style.display =
+        "block";
+
+    document.getElementById("foodName").focus();
+
+}
+
+
+async function saveFood() {
+
+    const name =
+        document.getElementById("foodName").value.trim();
+
+    const description =
+        document.getElementById("foodDescription").value.trim();
+
+    const price =
+        Number(document.getElementById("foodPrice").value);
+
+    const stock =
+        Number(document.getElementById("foodStock").value);
+
+    const icon =
+        document.getElementById("foodIcon").value.trim() || "🍽️";
+
+    const status =
+        document.getElementById("foodStatus").value;
+
+
+    if (!name || !description || price < 0 || stock < 0) {
+
+        alert("Please enter valid food details.");
+
+        return;
+    }
+
+
+    const food = {
+
+        id: editingId || Date.now(),
+
+        name: name,
+
+        description: description,
+
+        price: price,
+
+        stock: stock,
+
+        icon: icon,
+
+        status: status
+
+    };
+
+
+    try {
+
+        const response =
+            await fetch("/api/foods", {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify(food)
+
+            });
+
+
+        if (!response.ok) {
+
+            throw new Error("Save failed");
+
+        }
+
+
+        closeForm();
+
+        await loadFoods();
+
+
+    } catch (error) {
+
+        alert("Could not save food item.");
+
+    }
+
+}
+
+
+async function deleteFood(id) {
+
+    const food =
+        foods.find(item => item.id === id);
+
+    if (!food) return;
+
+
+    const confirmed =
+        confirm(`Delete "${food.name}"?`);
+
+
+    if (!confirmed) return;
+
+
+    try {
+
+        const response =
+            await fetch(`/api/foods/${id}`, {
+
+                method: "DELETE"
+
+            });
+
+
+        if (!response.ok) {
+
+            throw new Error("Delete failed");
+
+        }
+
+
+        await loadFoods();
+
+
+    } catch (error) {
+
+        alert("Could not delete food item.");
+
+    }
+
+}
+
+
+loadFoods();
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,296 @@
+
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CantiQ | Parent Settings</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f1e6;
+            color: #3f4932;
+        }
+
+        .topbar {
+            background: #66734b;
+            color: white;
+            padding: 18px 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .portal {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 35px auto;
+            padding: 0 20px;
+        }
+
+        .back {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #66734b;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        h1 {
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #777;
+            margin-bottom: 25px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 18px;
+            padding: 28px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.07);
+            margin-bottom: 20px;
+        }
+
+        .card h2 {
+            margin-bottom: 8px;
+            color: #4e5b38;
+        }
+
+        .card p {
+            color: #777;
+            margin-bottom: 22px;
+            line-height: 1.5;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #d7d7c9;
+            border-radius: 10px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #66734b;
+        }
+
+        .info-box {
+            background: #f0f2e8;
+            padding: 15px;
+            border-radius: 12px;
+            color: #56613f;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 11px;
+            background: #66734b;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #56613f;
+        }
+
+        #savedMessage {
+            display: none;
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 10px;
+            background: #e8f1df;
+            color: #4d6637;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .note {
+            font-size: 13px;
+            color: #888;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="topbar">
+        <div class="logo">CantiQ</div>
+        <div class="portal">Parent / Student Portal</div>
+    </div>
+
+    <div class="container">
+
+        <a href="dashboard.html" class="back">← Back to Dashboard</a>
+
+        <h1>Spending Settings</h1>
+        <p class="subtitle">
+            Manage your child's prepaid canteen balance and daily spending limit.
+        </p>
+
+        <div class="card">
+
+            <h2>💳 Canteen Balance</h2>
+
+            <p>
+                Set the amount available for your child's school canteen purchases.
+                This is the starting/prepaid balance, not the live available balance.
+            </p>
+
+            <div class="form-group">
+                <label for="annualBalance">
+                    Annual / Prepaid Balance (₹)
+                </label>
+
+                <input
+                    type="number"
+                    id="annualBalance"
+                    min="0"
+                    placeholder="e.g. 5000"
+                >
+
+                <div class="note">
+                    This amount is used as the starting balance for purchases.
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="dailyLimit">
+                    Daily Spending Limit (₹)
+                </label>
+
+                <input
+                    type="number"
+                    id="dailyLimit"
+                    min="0"
+                    placeholder="e.g. 150"
+                >
+
+                <div class="note">
+                    Your child cannot spend more than this amount in one day.
+                </div>
+            </div>
+
+            <button onclick="saveSettings()">
+                Save Settings
+            </button>
+
+            <div id="savedMessage">
+                ✓ Settings saved successfully
+            </div>
+
+        </div>
+
+        <div class="card">
+
+            <h2>ℹ️ How the balance works</h2>
+
+            <div class="info-box">
+                <strong>Annual / Prepaid Balance</strong> = starting amount<br><br>
+
+                <strong>Available Balance</strong> =
+                starting balance − completed purchases<br><br>
+
+                Example: If the starting balance is ₹5,000 and your child
+                purchases a ₹60 Fruit Juice, the available balance becomes
+                ₹4,940 automatically.
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        async function saveSettings() {
+
+        const annualBalance =
+            document.getElementById("annualBalance").value;
+
+        const dailyLimit =
+            document.getElementById("dailyLimit").value;
+
+        const response = await fetch("/api/settings", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                annualBalance: Number(annualBalance),
+                dailySpendingLimit: Number(dailyLimit)
+            })
+        });
+
+        if (response.ok) {
+
+            localStorage.setItem(
+                "cantiq_annual_balance",
+                annualBalance
+            );
+
+            localStorage.setItem(
+                "cantiq_daily_limit",
+                dailyLimit
+            );
+
+            document.getElementById("savedMessage").style.display = "block";
+
+            setTimeout(function () {
+                document.getElementById("savedMessage").style.display = "none";
+            }, 2500);
+        }
+    }
+
+    async function loadSettings() {
+
+        const response = await fetch("/api/settings");
+
+        if (response.ok) {
+
+            const settings = await response.json();
+
+            document.getElementById("annualBalance").value =
+                settings.balance;
+
+            document.getElementById("dailyLimit").value =
+                settings.dailyLimit;
+        }
+    }
+
+    loadSettings();
+</script>

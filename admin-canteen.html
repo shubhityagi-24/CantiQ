@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CantiQ - Manage Canteens</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f5ef;
+            color: #333;
+        }
+
+        .topbar {
+            background: #667238;
+            color: white;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand h2 {
+            font-size: 22px;
+        }
+
+        .brand p {
+            font-size: 12px;
+            opacity: 0.85;
+            margin-top: 3px;
+        }
+
+        .topbar a {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .container {
+            width: 86%;
+            max-width: 1150px;
+            margin: 35px auto;
+        }
+
+        .back {
+            display: inline-block;
+            color: #667238;
+            text-decoration: none;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .hero,
+        .panel,
+        .stat {
+            background: white;
+            border-radius: 18px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .hero {
+            padding: 28px;
+            margin-bottom: 25px;
+        }
+
+        .tag {
+            color: #667238;
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .hero h1 {
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+        .hero p {
+            color: #777;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin-bottom: 28px;
+        }
+
+        .stat {
+            padding: 20px;
+        }
+
+        .stat span {
+            display: block;
+            color: #70776c;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+
+        .stat strong {
+            color: #667238;
+            font-size: 26px;
+        }
+
+        .panel {
+            padding: 24px;
+        }
+
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .search {
+            flex: 1;
+        }
+
+        input {
+            width: 100%;
+            max-width: 420px;
+            padding: 11px 13px;
+            border: 1px solid #dfe4d9;
+            border-radius: 10px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        button {
+            border: none;
+            border-radius: 10px;
+            padding: 11px 15px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .primary {
+            background: #667238;
+            color: white;
+        }
+
+        .edit {
+            background: #eaeedb;
+            color: #4c5a2c;
+        }
+
+        .status-btn {
+            background: #efe8d2;
+            color: #6f6234;
+        }
+
+        .delete {
+            background: #f2e3e3;
+            color: #8a4f4f;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 720px;
+        }
+
+        th {
+            background: #f2f4ee;
+            padding: 14px;
+            text-align: left;
+            font-size: 13px;
+        }
+
+        td {
+            padding: 15px 14px;
+            border-bottom: 1px solid #eef1eb;
+            font-size: 14px;
+        }
+
+        .status {
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .open {
+            background: #e4f2e2;
+            color: #37774a;
+        }
+
+        .closed {
+            background: #f4e2e2;
+            color: #8d3f3e;
+        }
+
+        .actions {
+            display: flex;
+            gap: 7px;
+            flex-wrap: wrap;
+        }
+
+        .empty {
+            display: none;
+            text-align: center;
+            padding: 30px;
+            color: #677066;
+        }
+
+        .note {
+            margin-top: 20px;
+            background: #f4f6ef;
+            border-left: 4px solid #667238;
+            border-radius: 8px;
+            padding: 15px;
+            color: #646d62;
+            font-size: 13px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.45);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-box {
+            background: white;
+            width: 100%;
+            max-width: 460px;
+            border-radius: 18px;
+            padding: 28px;
+        }
+
+        .modal-box h2 {
+            margin-bottom: 18px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 7px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 11px 12px;
+            border: 1px solid #dfe4d9;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .cancel {
+            background: #ebefe8;
+            color: #5d645b;
+        }
+
+        @media (max-width: 700px) {
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                width: 92%;
+            }
+
+            .toolbar .primary {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="topbar">
+        <div class="brand">
+            <h2>CantiQ</h2>
+            <p>Admin Portal</p>
+        </div>
+        <a href="admin-dashboard.html">Dashboard</a>
+    </div>
+
+    <div class="container">
+        <a class="back" href="admin-dashboard.html">← Back to Admin Dashboard</a>
+
+        <section class="hero">
+            <div class="tag">CANTEEN MANAGEMENT</div>
+            <h1>Manage Canteens</h1>
+            <p>Track operating canteens, status, and assigned schools across the system.</p>
+        </section>
+
+        <section class="stats">
+            <div class="stat">
+                <span>Total Canteens</span>
+                <strong id="totalCanteens">0</strong>
+            </div>
+            <div class="stat">
+                <span>Open Now</span>
+                <strong id="openCanteens">0</strong>
+            </div>
+            <div class="stat">
+                <span>Closed</span>
+                <strong id="closedCanteens">0</strong>
+            </div>
+        </section>
+
+        <section class="panel">
+            <div class="toolbar">
+                <div class="search">
+                    <input type="text" id="searchInput" placeholder="Search canteens...">
+                </div>
+                <button class="primary" id="addCanteenButton">+ Add Canteen</button>
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Canteen Name</th>
+                            <th>School</th>
+                            <th>Location</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="canteenTable"></tbody>
+                </table>
+                <div class="empty" id="emptyMessage">No canteens found.</div>
+            </div>
+
+            <div class="note">
+                <strong>Prototype:</strong> Canteen data is saved in this browser for demo purposes.
+            </div>
+        </section>
+    </div>
+
+    <div class="modal" id="canteenModal">
+        <div class="modal-box">
+            <h2 id="modalTitle">Add Canteen</h2>
+
+            <div class="form-group">
+                <label>Canteen Name</label>
+                <input type="text" id="canteenName" placeholder="Enter canteen name">
+            </div>
+
+            <div class="form-group">
+                <label>School</label>
+                <input type="text" id="canteenSchool" placeholder="Enter school name">
+            </div>
+
+            <div class="form-group">
+                <label>Location</label>
+                <input type="text" id="canteenLocation" placeholder="Enter location">
+            </div>
+
+            <div class="form-group">
+                <label>Status</label>
+                <select id="canteenStatus">
+                    <option value="open">Open</option>
+                    <option value="closed">Closed</option>
+                </select>
+            </div>
+
+            <div class="modal-buttons">
+                <button class="cancel" id="cancelButton">Cancel</button>
+                <button class="primary" id="saveButton">Save Canteen</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const storageKey = "cantiqCanteens";
+
+        const defaultCanteens = [
+            {
+                id: 1,
+                name: "Main Canteen",
+                school: "Surevin International School",
+                location: "Niwari",
+                status: "open"
+            }
+        ];
+
+        let canteens = JSON.parse(localStorage.getItem(storageKey)) || defaultCanteens;
+        let editingId = null;
+
+        function saveCanteens() {
+            localStorage.setItem(storageKey, JSON.stringify(canteens));
+        }
+
+        function renderCanteens() {
+            const table = document.getElementById("canteenTable");
+            const empty = document.getElementById("emptyMessage");
+            const search = document.getElementById("searchInput").value.toLowerCase();
+
+            const filtered = canteens.filter(function(item) {
+                return item.name.toLowerCase().includes(search) || item.school.toLowerCase().includes(search);
+            });
+
+            table.innerHTML = "";
+
+            if (filtered.length === 0) {
+                empty.style.display = "block";
+            } else {
+                empty.style.display = "none";
+
+                filtered.forEach(function(item) {
+                    const row = document.createElement("tr");
+
+                    row.innerHTML = `
+                        <td><strong>${item.name}</strong></td>
+                        <td>${item.school}</td>
+                        <td>${item.location}</td>
+                        <td>
+                            <span class="status ${item.status === "open" ? "open" : "closed"}">
+                                ${item.status === "open" ? "Open" : "Closed"}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="actions">
+                                <button class="edit" data-action="edit" data-id="${item.id}">Edit</button>
+                                <button class="status-btn" data-action="status" data-id="${item.id}">
+                                    ${item.status === "open" ? "Close" : "Open"}
+                                </button>
+                                <button class="delete" data-action="delete" data-id="${item.id}">Delete</button>
+                            </div>
+                        </td>
+                    `;
+
+                    table.appendChild(row);
+                });
+            }
+
+            document.getElementById("totalCanteens").textContent = canteens.length;
+            document.getElementById("openCanteens").textContent = canteens.filter(function(item) {
+                return item.status === "open";
+            }).length;
+            document.getElementById("closedCanteens").textContent = canteens.filter(function(item) {
+                return item.status === "closed";
+            }).length;
+        }
+
+        function openAddCanteen() {
+            editingId = null;
+            document.getElementById("modalTitle").textContent = "Add Canteen";
+            document.getElementById("canteenName").value = "";
+            document.getElementById("canteenSchool").value = "";
+            document.getElementById("canteenLocation").value = "";
+            document.getElementById("canteenStatus").value = "open";
+            document.getElementById("canteenModal").style.display = "flex";
+        }
+
+        function openEditCanteen(id) {
+            const canteen = canteens.find(function(item) {
+                return item.id === id;
+            });
+
+            if (!canteen) return;
+
+            editingId = id;
+            document.getElementById("modalTitle").textContent = "Edit Canteen";
+            document.getElementById("canteenName").value = canteen.name;
+            document.getElementById("canteenSchool").value = canteen.school;
+            document.getElementById("canteenLocation").value = canteen.location;
+            document.getElementById("canteenStatus").value = canteen.status;
+            document.getElementById("canteenModal").style.display = "flex";
+        }
+
+        function closeModal() {
+            document.getElementById("canteenModal").style.display = "none";
+        }
+
+        function saveCanteen() {
+            const name = document.getElementById("canteenName").value.trim();
+            const school = document.getElementById("canteenSchool").value.trim();
+            const location = document.getElementById("canteenLocation").value.trim();
+            const status = document.getElementById("canteenStatus").value;
+
+            if (!name || !school || !location) {
+                alert("Please fill in all canteen details.");
+                return;
+            }
+
+            if (editingId !== null) {
+                const canteen = canteens.find(function(item) {
+                    return item.id === editingId;
+                });
+
+                if (canteen) {
+                    canteen.name = name;
+                    canteen.school = school;
+                    canteen.location = location;
+                    canteen.status = status;
+                }
+            } else {
+                canteens.push({
+                    id: Date.now(),
+                    name: name,
+                    school: school,
+                    location: location,
+                    status: status
+                });
+            }
+
+            saveCanteens();
+            renderCanteens();
+            closeModal();
+        }
+
+        function toggleStatus(id) {
+            const canteen = canteens.find(function(item) {
+                return item.id === id;
+            });
+
+            if (!canteen) return;
+
+            canteen.status = canteen.status === "open" ? "closed" : "open";
+            saveCanteens();
+            renderCanteens();
+        }
+
+        function deleteCanteen(id) {
+            const canteen = canteens.find(function(item) {
+                return item.id === id;
+            });
+
+            if (!canteen) return;
+
+            const answer = confirm("Delete " + canteen.name + "?");
+            if (!answer) return;
+
+            canteens = canteens.filter(function(item) {
+                return item.id !== id;
+            });
+
+            saveCanteens();
+            renderCanteens();
+        }
+
+        document.getElementById("addCanteenButton").addEventListener("click", openAddCanteen);
+        document.getElementById("cancelButton").addEventListener("click", closeModal);
+        document.getElementById("saveButton").addEventListener("click", saveCanteen);
+        document.getElementById("searchInput").addEventListener("input", renderCanteens);
+
+        document.getElementById("canteenTable").addEventListener("click", function(event) {
+            const button = event.target.closest("button");
+            if (!button) return;
+
+            const id = Number(button.dataset.id);
+            const action = button.dataset.action;
+
+            if (action === "edit") {
+                openEditCanteen(id);
+            }
+
+            if (action === "status") {
+                toggleStatus(id);
+            }
+
+            if (action === "delete") {
+                deleteCanteen(id);
+            }
+        });
+
+        document.getElementById("canteenModal").addEventListener("click", function(event) {
+            if (event.target === this) {
+                closeModal();
+            }
+        });
+
+        renderCanteens();
+    </script>
+
+</body>
+</html>
