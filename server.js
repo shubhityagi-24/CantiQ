@@ -247,7 +247,7 @@ app.get("/api/dashboard", (req, res) => {
 
 
 // SERVE FRONTEND
-app.use(express.static(path.join(__dirname, "../frontend")));
+app.use(express.static(__dirname));
 
 
 // START SERVER
